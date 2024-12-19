@@ -1,0 +1,28 @@
+plugins {
+    id 'org.liquibase.gradle' version '2.2.0'
+}
+
+apply plugin: "org.liquibase.gradle"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.20.0'
+    liquibaseRuntime 'org.postgresql:postgresql:42.5.4'
+    liquibaseRuntime 'info.picocli:picocli:4.7.3'
+}
+
+liquibase {
+    activities {
+        security {
+            changeLogFile "db/changelog.xml"
+            url "jdbc:postgresql://db:5432/" + System.getenv('POSTGRES_DB')
+            username System.getenv('POSTGRES_USER')
+            password System.getenv('POSTGRES_PASSWORD')
+            driver "org.postgresql.Driver"
+            logLevel "info"
+        }
+    }
+}
